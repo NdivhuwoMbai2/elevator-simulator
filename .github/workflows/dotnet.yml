@@ -25,7 +25,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test with dotnet
-      run: dotnet-test './elevator-simulator.generated.sln' --logger trx --results-directory TestResults-${{ matrix.dotnet-version }}
+      run: dotnet test './elevator-simulator.generated.sln' --logger trx --results-directory TestResults-${{ matrix.dotnet-version }}
     - name: Upload dotnet test results
       uses: actions/upload-artifact@v4
       with:
