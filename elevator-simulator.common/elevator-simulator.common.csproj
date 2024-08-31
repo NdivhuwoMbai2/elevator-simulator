@@ -5,10 +5,6 @@
     <RootNamespace>elevator_simulator.common</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Class1.cs" />
-  </ItemGroup>
+  </PropertyGroup>  
 
 </Project>
