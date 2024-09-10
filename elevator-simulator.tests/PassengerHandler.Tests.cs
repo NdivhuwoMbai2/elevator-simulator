@@ -22,20 +22,34 @@ namespace elevator_simulator.tests
         [Theory]
         [InlineData(2,4)]
         public void DropOff_passengers_valid(int numberOfPassengers,int passengerCount)
-        {
-            var ls = new Queue<Request>();
+        { 
 
-            var req = fixture.request;
-            req.NumberOfPassengers = numberOfPassengers;
+            var request = fixture.request;
+            request.NumberOfPassengers = numberOfPassengers;
 
 
-            var ele = fixture.elevator;
-            ele.PassengerCount = passengerCount;
-            ele.Movement = common.Enums.Movement.Stationary;
+            var elevator = fixture.elevator;
+            elevator.PassengerCount = passengerCount;
+            elevator.Movement = common.Enums.Movement.Stationary;
 
-            var result = PassengerHandler.DropPassengers(fixture.elevator, req).Result;
+            var result = PassengerHandler.DropPassengers(fixture.elevator, request).Result;
 
             Assert.True(result.PassengerCount == 2);
+        }
+        [Theory]
+        [InlineData(2, 4)]
+        public void DropOff_passengers_Invalid(int numberOfPassengers, int passengerCount)
+        {
+            var request = fixture.request;
+            request.NumberOfPassengers = numberOfPassengers; 
+
+            var elevator = fixture.elevator;
+            elevator.PassengerCount = passengerCount;
+            elevator.Movement = common.Enums.Movement.Motion;
+
+            var result = PassengerHandler.DropPassengers(fixture.elevator, request).Result;
+
+            Assert.False(result.PassengerCount == 2);
         }
     }
 }

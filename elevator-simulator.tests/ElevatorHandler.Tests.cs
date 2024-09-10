@@ -10,29 +10,38 @@ namespace elevator_simulator.tests
 {
     public class ElevatorHandler_tests : IClassFixture<TestDataFixture>
     {
-        public IFloorRequestHandler FloorRequestHandler;
-        public IElevatorHandler ElevatorRepository;
+        public IElevatorHandler ElevatorHandler;
         public TestDataFixture Fixture;
-        public ElevatorHandler_tests(IFloorRequestHandler FloorRequestHandler, IElevatorHandler ElevatorRepository, TestDataFixture Fixture)
+        public ElevatorHandler_tests(IFloorRequestHandler FloorRequestHandler, IElevatorHandler ElevatorHandler, TestDataFixture Fixture)
         {
-            this.FloorRequestHandler = FloorRequestHandler;
             this.Fixture = Fixture;
-            this.ElevatorRepository = ElevatorRepository;
+            this.ElevatorHandler = ElevatorHandler;
+        }
+        [Fact]
+        public void Add_elevator_valid()
+        {
+            var result = ElevatorHandler.Add(Fixture.elevator, Fixture.Elevators);
+            Assert.True(result.Count > 0);
+        }
+        [Fact]
+        public void Add_elevator_inValid()
+        {
+            var result = ElevatorHandler.Add(null, new List<common.v1.Models.Elevator>() { });
+            Assert.False(result.Count > 0);
         }
         [Fact]
         public void Get_elevator_with_space_valid()
         {
-            var res = Fixture.elevator;
-            var result = ElevatorRepository.GetElevatorWithSpace(Fixture.request, Fixture.Elevators).Result;
+            var result = ElevatorHandler.GetElevatorWithSpace(Fixture.request, Fixture.Elevators).Result;
             Assert.NotNull(result);
         }
         [Fact]
         public void Get_elevator_with_space_invalid()
-        { 
-            var result = ElevatorRepository.GetElevatorWithSpace(
+        {
+            var result = ElevatorHandler.GetElevatorWithSpace(
                 new common.v1.Models.Request() { NumberOfPassengers = 11 },
                 new List<common.v1.Models.Elevator>() { new common.v1.Models.Elevator { MaximumCapacity = 10 } }).Result;
-            Assert.True(result.Count==0);
+            Assert.True(result.Count == 0);
         }
     }
 }

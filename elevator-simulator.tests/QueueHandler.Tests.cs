@@ -54,9 +54,6 @@ namespace elevator_simulator.tests
 
             Assert.True(result.Direction == common.Enums.Direction.Idle);
         }
-
-
-
         [Fact]
         public void SendElevatorToPickup_valid()
         {
@@ -76,9 +73,5 @@ namespace elevator_simulator.tests
 
             Assert.True(result.Direction == common.Enums.Direction.Idle);
         }
-
-   
-
-
     }
 }

@@ -14,6 +14,6 @@ namespace elevator_simulator.common.v1.Models
             Name = name;
         }
         public string Name { get; set; }
-        public Elevator Elevator { get; set; }
+        public List<Elevator> Elevators { get; set; } = new();
     }
 }

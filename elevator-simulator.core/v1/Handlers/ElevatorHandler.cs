@@ -11,9 +11,12 @@ namespace elevator_simulator.core.v1.Handlers
     public class ElevatorHandler : IElevatorHandler
     {
 
-        public List<Elevator>? Add(Elevator elevator, List<Elevator>? elevators)
+        public List<Elevator>? Add(Elevator? elevator, List<Elevator>? elevators)
         {
-            elevators?.Add(elevator);
+            if (elevator != null)
+            {
+                elevators?.Add(elevator);
+            }
             return elevators;
         }
 
