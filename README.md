@@ -10,8 +10,7 @@ The Console application is for simulating elevator operations like displaying re
 ## Getting Started
 
 ### Dependencies
-
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
+ 
 * ex. Windows 10
 
 ### Installing
