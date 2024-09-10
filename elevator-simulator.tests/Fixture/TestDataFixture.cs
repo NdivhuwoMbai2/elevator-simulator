@@ -16,8 +16,8 @@ namespace elevator_simulator.tests.Fixture
         {
 
             Elevators = new List<Elevator>() {
-                new Elevator { Name = "test1", currentFloor = 10 },
-                new Elevator { Name = "test2", currentFloor = 5 } };
+                new() { Name = "test1", currentFloor = 10 },
+                new() { Name = "test2", currentFloor = 5 } };
             elevator = new Elevator()
             {
                 Name = "test1",
