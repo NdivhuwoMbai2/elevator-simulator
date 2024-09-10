@@ -77,7 +77,23 @@ namespace elevator_simulator.tests
             Assert.True(result.Direction == common.Enums.Direction.Idle);
         }
 
+        [Fact]
+        public void DropOff_passengers_valid()
+        {
+            var ls = new Queue<Request>();
 
+            var req = fixture.request;
+            req.NumberOfPassengers = 2;
+            
+
+            var ele = fixture.elevator;
+            ele.PassengerCount = 4;
+            ele.Movement = common.Enums.Movement.Stationary;
+
+            var result = iqueueHandler.DropPassengers(fixture.elevator,req).Result;
+
+            Assert.True(result.PassengerCount == 2);
+        }
 
 
     }

@@ -9,6 +9,6 @@ namespace elevator_simulator.common.v1.Models
 
     public class ElevatorType
     {
-        public List<string> ElevatorTypes = new List<string>(); 
+        public List<string> ElevatorTypes = new(); 
     }
 }

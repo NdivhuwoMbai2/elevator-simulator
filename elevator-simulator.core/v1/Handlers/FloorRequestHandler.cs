@@ -66,14 +66,12 @@ namespace elevator_simulator.core.v1.Handlers
         public void PrintElevatorStatus(int i, Movement movement, Direction direction)
         {
             Console.Beep();
+            Task.Delay(3000);
             Console.WriteLine($"..going up to floor number : {i}");
             Console.WriteLine($"Elevator is currently in {movement.ToString()} going {direction.ToString()}");
             Console.WriteLine();
         }
-        public Elevator GetClosestElevator(int requestedFloor, List<Elevator>? elevators)
-        {
-            return elevators?.Aggregate((x, y) => Math.Abs(x.currentFloor - requestedFloor) < Math.Abs(y.currentFloor - requestedFloor) ? x : y);
-        }
+    
     }
 }
 
