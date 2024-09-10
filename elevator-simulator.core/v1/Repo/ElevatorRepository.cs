@@ -35,9 +35,9 @@ namespace elevator_simulator.core.v1.Repo
         {
             return elevators?.Aggregate((x, y) => Math.Abs(x.currentFloor - requestedFloor) < Math.Abs(y.currentFloor - requestedFloor) ? x : y);
         }
-        public async Task<List<Elevator>> GetAvailableElevator(Request request, List<Elevator> elevators)
-        {
-            return elevators.Where(e => e.MaximumCapacity < (request.NumberOfPassengers + e.PassengerCount)).ToList();
+        public async Task<List<Elevator>> GetElevatorWithSpace(Request request, List<Elevator> elevators)
+        { 
+            return elevators.Where(e => e.MaximumCapacity > (request.NumberOfPassengers + e.PassengerCount)).ToList();
         }
     }
 }

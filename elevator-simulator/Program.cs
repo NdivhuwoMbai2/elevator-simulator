@@ -107,7 +107,8 @@ public class Program
             try
             {
                 //search for an elevator with enough space to avoid overload 
-                var availableEleList = ElevatorRepository.GetAvailableElevator(request, elevators).Result;
+                var availableEleList = ElevatorRepository.GetElevatorWithSpace(request, elevators).Result;
+                
                 if (availableEleList.Count == 0)
                 {
                     Console.WriteLine($"Elevators are out of space for Request at Floor {request.CurrentFloor} going to " +

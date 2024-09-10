@@ -15,6 +15,6 @@ namespace elevator_simulator.common.v1.Interfaces
         List<string> LoadElevatorTypes();
 
         Elevator GetClosestElevator(int requestedFloor, List<Elevator>? elevators);
-        Task<List<Elevator>> GetAvailableElevator(Request request, List<Elevator> elevators);
+        Task<List<Elevator>> GetElevatorWithSpace(Request request, List<Elevator> elevators);
     }
 }
