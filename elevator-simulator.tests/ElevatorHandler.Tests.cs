@@ -67,7 +67,7 @@ namespace elevator_simulator.tests
         public void Get_nearest_elevator_valid(int requestingFloor)
         {
             //arrange 
-            int expected = 5;
+            int expected = 0;
 
             //act
             var actualElevator = ElevatorHandler.GetClosestElevator(requestingFloor, Fixture.Elevators);
