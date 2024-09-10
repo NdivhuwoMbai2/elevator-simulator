@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace elevator_simulator.common.v1.Interfaces
 {
-    public interface IElevatorRepository
+    public interface IElevatorHandler
     {
-        public List<Elevator>? AddElevator(Elevator elevator, List<Elevator>? elevators);
+        public List<Elevator>? Add(Elevator elevator, List<Elevator>? elevators);
         public List<string> AddElevatorType(List<string> elevatorTypes,string elevatorType); 
-        List<string> LoadElevatorTypes();
-
+        List<string> LoadElevatorTypes(); 
         Elevator GetClosestElevator(int requestedFloor, List<Elevator>? elevators);
         Task<List<Elevator>> GetElevatorWithSpace(Request request, List<Elevator> elevators);
     }

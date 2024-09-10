@@ -1,12 +1,8 @@
 ﻿using elevator_simulator.common.v1.Interfaces;
 using elevator_simulator.common.v1.Models;
 using elevator_simulator.core.v1.Handlers;
-using elevator_simulator.core.v1.Repo;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Diagnostics.CodeAnalysis;
-using System.Security.Cryptography.X509Certificates;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class Program
 {
@@ -14,11 +10,12 @@ public class Program
     public static int NumOfElevators;
     public static List<Elevator>? Elevators;
     public static Elevator? Elevator;
-    public static ElevatorType ElevatorType;
+    public static ElevatorType? ElevatorType;
     public static Queue<Request>? ElevatorQueue;
-    public static IFloorRequestHandler FloorRequestHandler;
-    public static IElevatorRepository ElevatorRepository;
-    public static IQueueHandler QueueHandler;
+    public static IFloorRequestHandler? FloorRequestHandler;
+    public static IElevatorHandler? ElevatorRepository;
+    public static IQueueHandler? QueueHandler;
+    public static IPassengerHandler? PassengerHandler;
     public static bool isSystemRunning = false;
 
 
@@ -39,14 +36,16 @@ public class Program
                     //setup our DI
                     services.AddSingleton<IFloorRequestHandler, FloorRequestHandler>()
                     .AddSingleton<IQueueHandler, QueueHandler>()
-                    .AddSingleton<IElevatorRepository, ElevatorRepository>();
+                    .AddSingleton<IElevatorHandler, ElevatorHandler>()
+                    .AddSingleton<IPassengerHandler, PassengerHandler>();
 
 
                     var serviceProvider = services.BuildServiceProvider();
 
                     FloorRequestHandler = serviceProvider.GetRequiredService<IFloorRequestHandler>();
                     QueueHandler = serviceProvider.GetRequiredService<IQueueHandler>();
-                    ElevatorRepository = serviceProvider.GetRequiredService<IElevatorRepository>();
+                    ElevatorRepository = serviceProvider.GetRequiredService<IElevatorHandler>();
+                    PassengerHandler = serviceProvider.GetRequiredService<IPassengerHandler>();
 
                     Initialize();
 
@@ -84,7 +83,7 @@ public class Program
             int passengers = IsValidInt(Console.ReadLine());
 
 
-            await QueueHandler.AddToQueue(new Request() { Destination = eleKey, CurrentFloor = currentFloor, NumberOfPassengers = passengers }, ElevatorQueue);
+            await QueueHandler.Add(new Request() { Destination = eleKey, CurrentFloor = currentFloor, NumberOfPassengers = passengers }, ElevatorQueue);
 
             ProcessQueues(ElevatorQueue, Elevators);
 
@@ -108,7 +107,7 @@ public class Program
             {
                 //search for an elevator with enough space to avoid overload 
                 var availableEleList = ElevatorRepository.GetElevatorWithSpace(request, elevators).Result;
-                
+
                 if (availableEleList.Count == 0)
                 {
                     Console.WriteLine($"Elevators are out of space for Request at Floor {request.CurrentFloor} going to " +
@@ -123,20 +122,20 @@ public class Program
                     //this methed with send the elevator to pickup the passengers
                     elevator = await QueueHandler.SendElevatorToPickup(request, elevator);
 
-                    elevator = await QueueHandler.PickUpPassengers(elevator, request);
+                    elevator = await PassengerHandler.PickUpPassengers(elevator, request);
 
 
                     //SendElevator to the requested destination
                     elevator = await QueueHandler.SendElevatorToDropOff(request, elevator);
 
-                    elevator = await QueueHandler.DropPassengers(elevator, request);
+                    elevator = await PassengerHandler.DropPassengers(elevator, request);
                     elevatorQueue.Dequeue();
                 }
             }
             catch (System.InvalidOperationException ex)
             {
-
-                throw;
+                Console.WriteLine(ex.Message);
+                Console.WriteLine("Invalid operation occured while dequeuing");
             }
         }
         Console.WriteLine("No request pending ");
@@ -183,13 +182,13 @@ public class Program
             Elevator.MaximumCapacity = IsValidInt(Console.ReadLine());
             Console.WriteLine();
 
-            Elevators = ElevatorRepository.AddElevator(Elevator, Elevators);
+            Elevators = ElevatorRepository.Add(Elevator, Elevators);
         }
         Console.WriteLine("All Set");
         Console.WriteLine("=======");
         Console.WriteLine();
-    }  
-    private static int isValidElevatorType(string? elevatorType,List<string> elevatorTypes)
+    }
+    private static int isValidElevatorType(string? elevatorType, List<string> elevatorTypes)
     {
         int input;
         while (!Int32.TryParse(elevatorType, out input))
@@ -197,13 +196,14 @@ public class Program
             Console.WriteLine("Not a valid number, try again.");
             elevatorType = Console.ReadLine();
         }
-        while (input > elevatorType.Length) {
+        while (input > elevatorType.Length)
+        {
 
             Console.WriteLine("Not a valid number, elevator type please select 0,1 as shown above try again.");
-            input= IsValidInt(Console.ReadLine());
+            input = IsValidInt(Console.ReadLine());
         }
         return input;
-    } 
+    }
     private static int IsValidInt(string? elevatorType)
     {
         int result;
@@ -213,14 +213,14 @@ public class Program
             elevatorType = Console.ReadLine();
         }
         return result;
-    } 
+    }
     private static void Initialize()
     {
         ElevatorType = new ElevatorType();
         ElevatorQueue = new Queue<Request>();
         Elevators = new List<Elevator>();
         ElevatorType.ElevatorTypes = ElevatorRepository.LoadElevatorTypes();
-    } 
+    }
 }
 //number of elevators
 

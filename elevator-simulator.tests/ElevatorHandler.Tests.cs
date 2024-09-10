@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace elevator_simulator.tests
 {
-    public class ElevatorRepo : IClassFixture<TestDataFixture>
+    public class ElevatorHandler_tests : IClassFixture<TestDataFixture>
     {
         public IFloorRequestHandler FloorRequestHandler;
-        public IElevatorRepository ElevatorRepository;
+        public IElevatorHandler ElevatorRepository;
         public TestDataFixture Fixture;
-        public ElevatorRepo(IFloorRequestHandler FloorRequestHandler, IElevatorRepository ElevatorRepository, TestDataFixture Fixture)
+        public ElevatorHandler_tests(IFloorRequestHandler FloorRequestHandler, IElevatorHandler ElevatorRepository, TestDataFixture Fixture)
         {
             this.FloorRequestHandler = FloorRequestHandler;
             this.Fixture = Fixture;

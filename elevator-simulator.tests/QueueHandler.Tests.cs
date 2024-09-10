@@ -23,7 +23,7 @@ namespace elevator_simulator.tests
         public void AddItemsTo_Queue_valid()
         {
             var ls = new Queue<Request>();
-            var result = iqueueHandler.AddToQueue(fixture.request, ls).Result;
+            var result = iqueueHandler.Add(fixture.request, ls).Result;
 
             Assert.True(result.Count > 0);
         }
@@ -32,7 +32,7 @@ namespace elevator_simulator.tests
         {
             var ls = new Queue<Request>();
             ls.Enqueue(new Request() { CurrentFloor = 1, Destination = 2 });
-            var result = iqueueHandler.AddToQueue(new Request() { CurrentFloor = 1, Destination = 2 }, ls).Result;
+            var result = iqueueHandler.Add(new Request() { CurrentFloor = 1, Destination = 2 }, ls).Result;
 
             Assert.False(result.Count > 1);
         }
@@ -77,23 +77,7 @@ namespace elevator_simulator.tests
             Assert.True(result.Direction == common.Enums.Direction.Idle);
         }
 
-        [Fact]
-        public void DropOff_passengers_valid()
-        {
-            var ls = new Queue<Request>();
-
-            var req = fixture.request;
-            req.NumberOfPassengers = 2;
-            
-
-            var ele = fixture.elevator;
-            ele.PassengerCount = 4;
-            ele.Movement = common.Enums.Movement.Stationary;
-
-            var result = iqueueHandler.DropPassengers(fixture.elevator,req).Result;
-
-            Assert.True(result.PassengerCount == 2);
-        }
+   
 
 
     }

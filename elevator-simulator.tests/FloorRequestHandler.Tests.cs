@@ -11,9 +11,9 @@ namespace elevator_simulator.tests
     {
 
         public IFloorRequestHandler FloorRequestHandler;
-        public IElevatorRepository ElevatorRepository;
+        public IElevatorHandler ElevatorRepository;
         public TestDataFixture Fixture;
-        public FloorRequestHandler_Tests(IFloorRequestHandler FloorRequestHandler, IElevatorRepository ElevatorRepository, TestDataFixture Fixture)
+        public FloorRequestHandler_Tests(IFloorRequestHandler FloorRequestHandler, IElevatorHandler ElevatorRepository, TestDataFixture Fixture)
         {
             this.FloorRequestHandler = FloorRequestHandler;
             this.Fixture = Fixture;

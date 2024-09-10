@@ -11,7 +11,7 @@ namespace elevator_simulator.core.v1.Handlers
         {
             this.floorRequestHandler = floorRequestHandler;
         }
-        public async Task<Queue<Request>> AddToQueue(Request request, Queue<Request> ElevatorQueue)
+        public async Task<Queue<Request>> Add(Request request, Queue<Request> ElevatorQueue)
         {
             if (!ElevatorQueue.Any(e => e.CurrentFloor == request.CurrentFloor))
             {
@@ -57,28 +57,7 @@ namespace elevator_simulator.core.v1.Handlers
             }
             return elevator;
         }
-        public async Task<Elevator> DropPassengers(Elevator elevator, Request request)
-        {
-            if (elevator.Movement == common.Enums.Movement.Stationary)
-            {
-                elevator.PassengerCount = elevator.PassengerCount - request.NumberOfPassengers;
-
-                // elevator.PassengerCount = Math.Max(0, elevator.PassengerCount);
-                Console.WriteLine($"Drooped {request.NumberOfPassengers} number of passengers");
-                Console.WriteLine($"Elevator {elevator.Name} has {elevator.PassengerCount} passengers");
-            }
-            return await Task.FromResult(elevator);
-        }
-        public async Task<Elevator> PickUpPassengers(Elevator elevator, Request request)
-        {
-            if (elevator.Movement == common.Enums.Movement.Stationary)
-            {
-                elevator.PassengerCount = +request.NumberOfPassengers;
-                Console.WriteLine($"Add {request.NumberOfPassengers} number of passengers");
-                Console.WriteLine($"Elevator {elevator.Name} has {elevator.PassengerCount} passengers");
-            }
-            return await Task.FromResult(elevator);
-        }
+       
       
 
     }
