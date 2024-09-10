@@ -1,6 +1,5 @@
 ﻿using elevator_simulator.common.v1.Interfaces;
 using elevator_simulator.core.v1.Handlers;
-using elevator_simulator.core.v1.Repo;
 using elevator_simulator.tests.Fixture;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -20,7 +19,9 @@ namespace elevator_simulator.tests
 
             services.AddTransient<IQueueHandler, QueueHandler>();
 
-            services.AddTransient<IElevatorRepository, ElevatorRepository>();
+            services.AddTransient<IElevatorHandler, ElevatorHandler>();
+
+            services.AddTransient<IPassengerHandler, PassengerHandler>();
 
         }
     }
