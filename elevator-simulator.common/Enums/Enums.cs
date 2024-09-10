@@ -9,7 +9,7 @@
         Stationary
     }
     /// <summary>
-    /// The 
+    /// Used to point out the direction of the elevator
     /// </summary>
     public enum Direction
     {

@@ -7,8 +7,7 @@ using Microsoft.Extensions.Hosting;
 public class Program
 {
     public static Building? Building;
-    public static int NumOfElevators;
-    public static List<Elevator>? Elevators;
+    public static int NumOfElevators;  
     public static Elevator? Elevator;
     public static ElevatorType? ElevatorType;
     public static Queue<Request>? ElevatorQueue;
@@ -85,7 +84,7 @@ public class Program
 
             await QueueHandler.Add(new Request() { Destination = eleKey, CurrentFloor = currentFloor, NumberOfPassengers = passengers }, ElevatorQueue);
 
-            ProcessQueues(ElevatorQueue, Elevators);
+            ProcessQueues(ElevatorQueue, Building.Elevators);
 
             Console.WriteLine();
             Console.Write("Would you like to request a lift? [y/n] ");
@@ -182,7 +181,7 @@ public class Program
             Elevator.MaximumCapacity = IsValidInt(Console.ReadLine());
             Console.WriteLine();
 
-            Elevators = ElevatorRepository.Add(Elevator, Elevators);
+            Building.Elevators = ElevatorRepository.Add(Elevator, Building.Elevators);
         }
         Console.WriteLine("All Set");
         Console.WriteLine("=======");
@@ -217,14 +216,8 @@ public class Program
     private static void Initialize()
     {
         ElevatorType = new ElevatorType();
-        ElevatorQueue = new Queue<Request>();
-        Elevators = new List<Elevator>();
+        ElevatorQueue = new Queue<Request>(); 
         ElevatorType.ElevatorTypes = ElevatorRepository.LoadElevatorTypes();
     }
-}
-//number of elevators
-
-//elevator num1
-//elevator type
-//number of floors
+} 
 
