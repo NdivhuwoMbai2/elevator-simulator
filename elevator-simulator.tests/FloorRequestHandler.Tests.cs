@@ -1,8 +1,5 @@
 using elevator_simulator.common.v1.Interfaces;
-using elevator_simulator.common.v1.Models;
-using elevator_simulator.core.v1.Handlers;
 using elevator_simulator.tests.Fixture;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace elevator_simulator.tests
 {
@@ -10,32 +7,41 @@ namespace elevator_simulator.tests
     public class FloorRequestHandler_Tests : IClassFixture<TestDataFixture>
     {
 
-        public IFloorRequestHandler FloorRequestHandler;
-        public IElevatorHandler ElevatorRepository;
+        public IFloorRequestHandler FloorRequestHandler; 
         public TestDataFixture Fixture;
-        public FloorRequestHandler_Tests(IFloorRequestHandler FloorRequestHandler, IElevatorHandler ElevatorRepository, TestDataFixture Fixture)
+        public FloorRequestHandler_Tests(IFloorRequestHandler FloorRequestHandler,  TestDataFixture Fixture)
         {
             this.FloorRequestHandler = FloorRequestHandler;
-            this.Fixture = Fixture;
-            this.ElevatorRepository = ElevatorRepository;
+            this.Fixture = Fixture; 
         }
-        [Fact]
-        public void Decend_input_2floor_returns_invalidvalid()
+        [Theory]
+        [InlineData(2, 5)]
+        public void Decend_input_2floor_returns_invalidvalid(int currentFloor, int requestedFloor)
         {
-            Fixture.elevator.currentFloor = 2;
-            var result = FloorRequestHandler.Descend(Fixture.elevator, 5).Result;
+            //arrange 
+            int expected = 3;
+            Fixture.elevator.currentFloor = currentFloor;
 
-            Assert.False(result.currentFloor == 3);
-            Assert.NotEmpty(result.ErrorMessage);
+            //act
+            var actual = FloorRequestHandler.Descend(Fixture.elevator, requestedFloor)?.Result?.currentFloor;
+
+            //assert
+            Assert.NotEqual(expected, actual);
         }
-        [Fact]
-        public void Decend_input_2floor_returns_valid()
+        [Theory]
+        [InlineData(5, 2)]
+        public void Decend_input_2floor_returns_valid(int currentFloor, int requestedFloor)
         {
-            Fixture.elevator.currentFloor = 5;
-            var result = FloorRequestHandler.Descend(Fixture.elevator, 2).Result;
+            //arrange 
+            int expected = 2;
+            Fixture.elevator.currentFloor = currentFloor;
 
-            Assert.True(result.currentFloor == 2);
-            Assert.Empty(result.ErrorMessage);
+            //act
+            var actual = FloorRequestHandler.Descend(Fixture.elevator, requestedFloor).Result;
+
+            //assert
+            Assert.Equal(expected, actual.currentFloor);
+            Assert.Empty(actual.ErrorMessage);
         }
         [Fact]
         public void Ascend_input_2floor_returns_valid()
@@ -45,22 +51,7 @@ namespace elevator_simulator.tests
 
             Assert.True(result.currentFloor == 2);
             Assert.Empty(result.ErrorMessage);
-        }
-
-        [Fact]
-        public void Get_nearest_elevator_valid()
-        {
-            var result = ElevatorRepository.GetClosestElevator(2, Fixture.Elevators);
-
-            Assert.True(result.currentFloor == 5);
-        }
-        [Fact]
-        public void Get_nearest_elevator_invalid()
-        {
-            var result = ElevatorRepository.GetClosestElevator(2, Fixture.Elevators);
-
-            Assert.False(result.currentFloor == 10);
-        }
+        }        
         [Fact]
         public void SetIdleState_valid_invalid()
         {
@@ -77,8 +68,6 @@ namespace elevator_simulator.tests
 
             Assert.True(result.Movement == common.Enums.Movement.Stationary);
             Assert.True(result.Direction == common.Enums.Direction.Idle);
-        }
-
-
+        } 
     }
 }

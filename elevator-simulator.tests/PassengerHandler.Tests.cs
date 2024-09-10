@@ -11,45 +11,51 @@ using System.Threading.Tasks;
 namespace elevator_simulator.tests
 {
     public class PassengerHander_test : IClassFixture<TestDataFixture>
-    { 
+    {
         public IPassengerHandler PassengerHandler;
         public TestDataFixture fixture;
-        public PassengerHander_test( IPassengerHandler PassengerHandler, TestDataFixture Fixture)
-        { 
+        public PassengerHander_test(IPassengerHandler PassengerHandler, TestDataFixture Fixture)
+        {
             this.fixture = Fixture;
             this.PassengerHandler = PassengerHandler;
-        } 
+        }
         [Theory]
-        [InlineData(2,4)]
-        public void DropOff_passengers_valid(int numberOfPassengers,int passengerCount)
-        { 
-
+        [InlineData(2, 4)]
+        public void DropOff_passengers_valid(int numberOfPassengers, int passengerCount)
+        {
+            //arrange
+            int expected = 2;
             var request = fixture.request;
             request.NumberOfPassengers = numberOfPassengers;
-
 
             var elevator = fixture.elevator;
             elevator.PassengerCount = passengerCount;
             elevator.Movement = common.Enums.Movement.Stationary;
 
+            //act
             var result = PassengerHandler.DropPassengers(fixture.elevator, request).Result;
 
-            Assert.True(result.PassengerCount == 2);
+            //assert
+            Assert.Equal(expected, result.PassengerCount);
         }
         [Theory]
         [InlineData(2, 4)]
         public void DropOff_passengers_Invalid(int numberOfPassengers, int passengerCount)
         {
+            //arrange
+            int expected = 2;
             var request = fixture.request;
-            request.NumberOfPassengers = numberOfPassengers; 
+            request.NumberOfPassengers = numberOfPassengers;
 
             var elevator = fixture.elevator;
             elevator.PassengerCount = passengerCount;
             elevator.Movement = common.Enums.Movement.Motion;
 
-            var result = PassengerHandler.DropPassengers(fixture.elevator, request).Result;
+            //act
+            var actual = PassengerHandler.DropPassengers(fixture.elevator, request).Result;
 
-            Assert.False(result.PassengerCount == 2);
+            //assert
+            Assert.NotEqual(expected, actual.PassengerCount);
         }
     }
 }
