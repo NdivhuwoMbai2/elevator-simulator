@@ -56,9 +56,6 @@ namespace elevator_simulator.core.v1.Handlers
                 elevator = await floorRequestHandler.Ascend(elevator, request.CurrentFloor);
             }
             return elevator;
-        }
-       
-      
-
+        } 
     }
 }
