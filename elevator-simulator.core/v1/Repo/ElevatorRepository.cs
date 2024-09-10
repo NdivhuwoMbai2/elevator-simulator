@@ -25,11 +25,19 @@ namespace elevator_simulator.core.v1.Repo
  
         public List<string> LoadElevatorTypes()
         {
-            ElevatorType elevatorType = new ElevatorType();
+            ElevatorType elevatorType = new();
             elevatorType.ElevatorTypes.Add("high-speed");
             elevatorType.ElevatorTypes.Add("glass");
             elevatorType.ElevatorTypes.Add("freight");
             return elevatorType.ElevatorTypes;
+        }
+        public Elevator GetClosestElevator(int requestedFloor, List<Elevator>? elevators)
+        {
+            return elevators?.Aggregate((x, y) => Math.Abs(x.currentFloor - requestedFloor) < Math.Abs(y.currentFloor - requestedFloor) ? x : y);
+        }
+        public async Task<List<Elevator>> GetAvailableElevator(Request request, List<Elevator> elevators)
+        {
+            return elevators.Where(e => e.MaximumCapacity < (request.NumberOfPassengers + e.PassengerCount)).ToList();
         }
     }
 }

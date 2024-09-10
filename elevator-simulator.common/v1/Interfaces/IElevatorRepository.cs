@@ -13,5 +13,8 @@ namespace elevator_simulator.common.v1.Interfaces
         public List<Elevator>? AddElevator(Elevator elevator, List<Elevator>? elevators);
         public List<string> AddElevatorType(List<string> elevatorTypes,string elevatorType); 
         List<string> LoadElevatorTypes();
+
+        Elevator GetClosestElevator(int requestedFloor, List<Elevator>? elevators);
+        Task<List<Elevator>> GetAvailableElevator(Request request, List<Elevator> elevators);
     }
 }
