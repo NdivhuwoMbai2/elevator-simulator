@@ -26,21 +26,14 @@ namespace elevator_simulator.core.v1.Handlers
             return elevatorTypes;
         }
 
-        public List<string> LoadElevatorTypes()
+        public List<string> LoadElevatorTypes() => new List<string>() { "high-speed", "glass", "freight" };
+
+        public async Task<Elevator> GetClosestElevator(int requestedFloor, List<Elevator>? elevators)
         {
-            ElevatorType elevatorType = new();
-            elevatorType.ElevatorTypes.Add("high-speed");
-            elevatorType.ElevatorTypes.Add("glass");
-            elevatorType.ElevatorTypes.Add("freight");
-            return elevatorType.ElevatorTypes;
+            return await Task.FromResult(elevators?.Aggregate((x, y) => Math.Abs(x.currentFloor - requestedFloor) < Math.Abs(y.currentFloor - requestedFloor) ? x : y));
         }
-        public Elevator GetClosestElevator(int requestedFloor, List<Elevator>? elevators)
-        {
-            return elevators?.Aggregate((x, y) => Math.Abs(x.currentFloor - requestedFloor) < Math.Abs(y.currentFloor - requestedFloor) ? x : y);
-        }
-        public async Task<List<Elevator>> GetElevatorWithSpace(Request request, List<Elevator> elevators)
-        {
-            return elevators.Where(e => e.MaximumCapacity > request.NumberOfPassengers + e.PassengerCount).ToList();
-        }
+
+        public async Task<List<Elevator>> GetElevatorWithSpace(Request request, List<Elevator> elevators) 
+            => await Task.FromResult(elevators.Where(e => e.MaximumCapacity > request.NumberOfPassengers + e.PassengerCount).ToList());
     }
 }

@@ -46,17 +46,22 @@ namespace elevator_simulator.tests
         [Fact]
         public void Ascend_input_2floor_returns_valid()
         {
+            //arrange 
             Fixture.elevator.currentFloor = 0;
+
+            //act
             var result = FloorRequestHandler.Ascend(Fixture.elevator, 2).Result;
 
+            //act
             Assert.True(result.currentFloor == 2);
             Assert.Empty(result.ErrorMessage);
         }        
         [Fact]
         public void SetIdleState_valid_invalid()
         {
+            //act
             var result = FloorRequestHandler.StayIdle(Fixture.elevator).Result;
-
+            //assert
             Assert.False(result.Movement == common.Enums.Movement.Motion);
             Assert.False(result.Direction == common.Enums.Direction.Up);
         }
@@ -64,8 +69,9 @@ namespace elevator_simulator.tests
         [Fact]
         public void SetIdleState_valid()
         {
+            //act
             var result = FloorRequestHandler.StayIdle(Fixture.elevator).Result;
-
+            //assert
             Assert.True(result.Movement == common.Enums.Movement.Stationary);
             Assert.True(result.Direction == common.Enums.Direction.Idle);
         } 
