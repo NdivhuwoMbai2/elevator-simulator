@@ -12,7 +12,7 @@ public class Program
     public static ElevatorType? ElevatorType;
     public static Queue<Request>? ElevatorQueue;
     public static IFloorRequestHandler? FloorRequestHandler;
-    public static IElevatorHandler? ElevatorRepository;
+    public static IElevatorHandler? ElevatorHandler;
     public static IQueueHandler? QueueHandler;
     public static IPassengerHandler? PassengerHandler;
     public static bool isSystemRunning = false;
@@ -43,7 +43,7 @@ public class Program
 
                     FloorRequestHandler = serviceProvider.GetRequiredService<IFloorRequestHandler>();
                     QueueHandler = serviceProvider.GetRequiredService<IQueueHandler>();
-                    ElevatorRepository = serviceProvider.GetRequiredService<IElevatorHandler>();
+                    ElevatorHandler = serviceProvider.GetRequiredService<IElevatorHandler>();
                     PassengerHandler = serviceProvider.GetRequiredService<IPassengerHandler>();
 
                     Initialize();
@@ -72,23 +72,22 @@ public class Program
             do
             {
                 Console.WriteLine();
-                Console.Write("If you would to request a lift PRESS L ");
-                Console.Write("If you like to add elevator type PRESS S ");
+                Console.Write("If you would to request an elevator PRESS L ");
+                Console.WriteLine();
+                Console.Write("If you like to add elevator type PRESS S  or press any key to exit");
+                Console.WriteLine();
                 response = Console.ReadKey(false).Key;   // true is intercept key (dont show), false is show
                 if (response != ConsoleKey.Enter)
                     Console.WriteLine();
                 if (response == ConsoleKey.L)
                 {
                     RunElevatorRequest();
-                   
                 }
-                else if(response == ConsoleKey.S){
+                else if (response == ConsoleKey.S)
+                {
                     RunElevatorTypeSeup();
                 }
-
-               
-
-            } while (response == ConsoleKey.Y);
+            } while (response == ConsoleKey.L && response == ConsoleKey.S);
             Console.WriteLine("done!!!");
         }
         catch (Exception ex)
@@ -101,7 +100,8 @@ public class Program
     {
         Console.WriteLine();
         Console.WriteLine("What is the title of the new elevatortype");
-
+        Console.WriteLine();
+        ElevatorType.ElevatorTypes = ElevatorHandler.AddElevatorType(ElevatorType.ElevatorTypes, Console.ReadLine());
     }
 
     private async static void RunElevatorRequest()
@@ -121,7 +121,7 @@ public class Program
 
         await QueueHandler.Add(new Request() { Destination = eleKey, CurrentFloor = currentFloor, NumberOfPassengers = passengers }, ElevatorQueue);
 
-        ProcessQueues(ElevatorQueue, Building.Elevators);
+        await ProcessQueues(ElevatorQueue, Building.Elevators);
     }
 
     private static async Task<Queue<Request>> ProcessQueues(Queue<Request> elevatorQueue, List<Elevator>? elevators)
@@ -133,7 +133,7 @@ public class Program
             try
             {
                 //search for an elevator with enough space to avoid overload 
-                var availableEleList = ElevatorRepository.GetElevatorWithSpace(request, elevators).Result;
+                var availableEleList = ElevatorHandler.GetElevatorWithSpace(request, elevators).Result;
 
                 if (availableEleList.Count == 0)
                 {
@@ -144,18 +144,18 @@ public class Program
                 }
                 else
                 {
-                    Elevator elevator = await ElevatorRepository.GetClosestElevator(request.CurrentFloor, availableEleList);
-                    
+                    Elevator elevator = await ElevatorHandler.GetClosestElevator(request.CurrentFloor, availableEleList);
+
                     //this methed with send the elevator to pickup the passengers
                     elevator = await QueueHandler.SendElevatorToPickup(request, elevator);
-
-                    elevator = await PassengerHandler.PickUpPassengers(elevator, request);
+                     
+                    elevator = await PassengerHandler.Boarding(elevator_simulator.common.Enums.Boarding.In, elevator, request);
 
 
                     //SendElevator to the requested destination
-                    elevator = await QueueHandler.SendElevatorToDropOff(request, elevator);
+                    elevator = await QueueHandler.SendElevatorToDropOff(request, elevator); 
 
-                    elevator = await PassengerHandler.DropPassengers(elevator, request);
+                    elevator = await PassengerHandler.Boarding(elevator_simulator.common.Enums.Boarding.Out, elevator, request);
                     elevatorQueue.Dequeue();
                 }
             }
@@ -209,7 +209,7 @@ public class Program
             Elevator.MaximumCapacity = IsValidInt(Console.ReadLine());
             Console.WriteLine();
 
-            Building.Elevators = ElevatorRepository.Add(Elevator, Building.Elevators);
+            Building.Elevators = ElevatorHandler.Add(Elevator, Building.Elevators);
         }
         Console.WriteLine("All Set");
         Console.WriteLine("=======");
@@ -245,7 +245,7 @@ public class Program
     {
         ElevatorType = new ElevatorType();
         ElevatorQueue = new Queue<Request>();
-        ElevatorType.ElevatorTypes = ElevatorRepository.LoadElevatorTypes();
+        ElevatorType.ElevatorTypes = ElevatorHandler.LoadElevatorTypes();
     }
 }
 

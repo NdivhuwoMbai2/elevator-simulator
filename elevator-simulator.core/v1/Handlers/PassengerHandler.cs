@@ -1,4 +1,5 @@
-﻿using elevator_simulator.common.v1.Interfaces;
+﻿using elevator_simulator.common.Enums;
+using elevator_simulator.common.v1.Interfaces;
 using elevator_simulator.common.v1.Models;
 using System;
 using System.Collections.Generic;
@@ -10,24 +11,23 @@ namespace elevator_simulator.core.v1.Handlers
 {
     public class PassengerHandler : IPassengerHandler
     {
-        public async Task<Elevator> DropPassengers(Elevator elevator, Request request)
+        
+        public async Task<Elevator> Boarding(Boarding boarding, Elevator elevator, Request request)
         {
             if (elevator.Movement == common.Enums.Movement.Stationary)
             {
-                elevator.PassengerCount = elevator.PassengerCount - request.NumberOfPassengers;
-
-                // elevator.PassengerCount = Math.Max(0, elevator.PassengerCount);
-                Console.WriteLine($"Drooped {request.NumberOfPassengers} number of passengers");
-                Console.WriteLine($"Elevator {elevator.Name} has {elevator.PassengerCount} passengers");
-            }
-            return await Task.FromResult(elevator);
-        }
-        public async Task<Elevator> PickUpPassengers(Elevator elevator, Request request)
-        {
-            if (elevator.Movement == common.Enums.Movement.Stationary)
-            {
-                elevator.PassengerCount = elevator.PassengerCount + request.NumberOfPassengers;
-                Console.WriteLine($"Add {request.NumberOfPassengers} number of passengers");
+                switch (boarding)
+                {
+                    case common.Enums.Boarding.In:
+                        elevator.PassengerCount = elevator.PassengerCount + request.NumberOfPassengers;
+                        break;
+                    case common.Enums.Boarding.Out:
+                        elevator.PassengerCount = elevator.PassengerCount - request.NumberOfPassengers;
+                        break;
+                    default:
+                        break;
+                } 
+                Console.WriteLine($"{request.NumberOfPassengers} number of passengers boarded {boarding.ToString()}");
                 Console.WriteLine($"Elevator {elevator.Name} has {elevator.PassengerCount} passengers");
             }
             return await Task.FromResult(elevator);

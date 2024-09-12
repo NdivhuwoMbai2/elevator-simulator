@@ -33,7 +33,7 @@ namespace elevator_simulator.tests
             elevator.Movement = common.Enums.Movement.Stationary;
 
             //act
-            var result = PassengerHandler.DropPassengers(fixture.elevator, request).Result;
+            var result = PassengerHandler.Boarding(common.Enums.Boarding.Out, fixture.elevator, request).Result;
 
             //assert
             Assert.Equal(expected, result.PassengerCount);
@@ -52,7 +52,7 @@ namespace elevator_simulator.tests
             elevator.Movement = common.Enums.Movement.Motion;
 
             //act
-            var actual = PassengerHandler.DropPassengers(fixture.elevator, request).Result;
+            var actual = PassengerHandler.Boarding(common.Enums.Boarding.Out, fixture.elevator, request).Result;
 
             //assert
             Assert.NotEqual(expected, actual.PassengerCount);
@@ -71,7 +71,7 @@ namespace elevator_simulator.tests
             elevator.Movement = common.Enums.Movement.Stationary;
 
             //act
-            var result = PassengerHandler.PickUpPassengers(fixture.elevator, request).Result;
+            var result = PassengerHandler.Boarding(common.Enums.Boarding.In, fixture.elevator, request).Result;
 
             //assert
             Assert.Equal(expected, result.PassengerCount);
@@ -90,7 +90,7 @@ namespace elevator_simulator.tests
             elevator.Movement = common.Enums.Movement.Stationary;
 
             //act
-            var result = PassengerHandler.PickUpPassengers(fixture.elevator, request).Result;
+            var result = PassengerHandler.Boarding(common.Enums.Boarding.Out, fixture.elevator, request).Result;
 
             //assert
             Assert.NotEqual(expected, result.PassengerCount);

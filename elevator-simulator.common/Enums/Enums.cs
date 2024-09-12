@@ -17,4 +17,9 @@
         Down,
         Idle
     }
+    public enum Boarding
+    {
+        In,
+        Out
+    }
 }

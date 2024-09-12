@@ -105,7 +105,7 @@ namespace elevator_simulator.tests
             Assert.Equal(expected, actual);
         }
         [Theory]
-        [InlineData("glass")]
+        [InlineData("glasS")]
         public void Add_an_already_existing_elevator_types_invalid_throws_ArgumentException(string elevatorType)
         {
             //arrange 
