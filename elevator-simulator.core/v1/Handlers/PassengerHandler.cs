@@ -25,7 +25,8 @@ namespace elevator_simulator.core.v1.Handlers
                         elevator.PassengerCount = elevator.PassengerCount - request.NumberOfPassengers;
                         break;
                     default:
-                        break;
+                        Console.Error.WriteLine("no valid boarding state entered");
+                        throw new ArgumentException("no valid boarding state entered"); 
                 } 
                 Console.WriteLine($"{request.NumberOfPassengers} number of passengers boarded {boarding.ToString()}");
                 Console.WriteLine($"Elevator {elevator.Name} has {elevator.PassengerCount} passengers");
