@@ -26,7 +26,7 @@ namespace elevator_simulator.core.v1.Handlers
         {
             if (elevator.Movement == common.Enums.Movement.Stationary)
             {
-                elevator.PassengerCount = +request.NumberOfPassengers;
+                elevator.PassengerCount = elevator.PassengerCount + request.NumberOfPassengers;
                 Console.WriteLine($"Add {request.NumberOfPassengers} number of passengers");
                 Console.WriteLine($"Elevator {elevator.Name} has {elevator.PassengerCount} passengers");
             }

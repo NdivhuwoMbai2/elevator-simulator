@@ -50,7 +50,7 @@ public class Program
 
                     SetupBuildingElevators();
 
-                    Task.Run(() => ProcessElevatorRequest());
+                    Task.Run(() => ProcessElevatorSetupRequest());
 
                 })
                 .Build();
@@ -64,7 +64,7 @@ public class Program
 
         }
     }
-    private async static void ProcessElevatorRequest()
+    private async static void ProcessElevatorSetupRequest()
     {
         try
         {
@@ -72,27 +72,21 @@ public class Program
             do
             {
                 Console.WriteLine();
-                Console.WriteLine("What is your current floor number");
-                int currentFloor = IsValidInt(Console.ReadLine());
-
-                Console.WriteLine();
-                Console.WriteLine("What floor would like to go to?");
-                int eleKey = IsValidInt(Console.ReadLine());
-
-                Console.WriteLine();
-                Console.WriteLine("How many passengers?");
-                int passengers = IsValidInt(Console.ReadLine());
-
-
-                await QueueHandler.Add(new Request() { Destination = eleKey, CurrentFloor = currentFloor, NumberOfPassengers = passengers }, ElevatorQueue);
-
-                ProcessQueues(ElevatorQueue, Building.Elevators);
-
-                Console.WriteLine();
-                Console.Write("Would you like to request a lift? [y/n] ");
+                Console.Write("If you would to request a lift PRESS L ");
+                Console.Write("If you like to add elevator type PRESS S ");
                 response = Console.ReadKey(false).Key;   // true is intercept key (dont show), false is show
                 if (response != ConsoleKey.Enter)
                     Console.WriteLine();
+                if (response == ConsoleKey.L)
+                {
+                    RunElevatorRequest();
+                   
+                }
+                else if(response == ConsoleKey.S){
+                    RunElevatorTypeSeup();
+                }
+
+               
 
             } while (response == ConsoleKey.Y);
             Console.WriteLine("done!!!");
@@ -101,6 +95,33 @@ public class Program
         {
             await Console.Error.WriteLineAsync(ex.Message);
         }
+    }
+
+    private static void RunElevatorTypeSeup()
+    {
+        Console.WriteLine();
+        Console.WriteLine("What is the title of the new elevatortype");
+
+    }
+
+    private async static void RunElevatorRequest()
+    {
+        Console.WriteLine();
+        Console.WriteLine("What is your current floor number");
+        int currentFloor = IsValidInt(Console.ReadLine());
+
+        Console.WriteLine();
+        Console.WriteLine("What floor would like to go to?");
+        int eleKey = IsValidInt(Console.ReadLine());
+
+        Console.WriteLine();
+        Console.WriteLine("How many passengers?");
+        int passengers = IsValidInt(Console.ReadLine());
+
+
+        await QueueHandler.Add(new Request() { Destination = eleKey, CurrentFloor = currentFloor, NumberOfPassengers = passengers }, ElevatorQueue);
+
+        ProcessQueues(ElevatorQueue, Building.Elevators);
     }
 
     private static async Task<Queue<Request>> ProcessQueues(Queue<Request> elevatorQueue, List<Elevator>? elevators)

@@ -57,5 +57,43 @@ namespace elevator_simulator.tests
             //assert
             Assert.NotEqual(expected, actual.PassengerCount);
         }
+        [Theory]
+        [InlineData(2, 4)]
+        public void PickUp_passengers_valid(int numberOfPassengers, int passengerCount)
+        {
+            //arrange
+            int expected = 6;
+            var request = fixture.request;
+            request.NumberOfPassengers = numberOfPassengers;
+
+            var elevator = fixture.elevator;
+            elevator.PassengerCount = passengerCount;
+            elevator.Movement = common.Enums.Movement.Stationary;
+
+            //act
+            var result = PassengerHandler.PickUpPassengers(fixture.elevator, request).Result;
+
+            //assert
+            Assert.Equal(expected, result.PassengerCount);
+        }
+        [Theory]
+        [InlineData(2, 6)]
+        public void PickUp_passengers_invalid(int numberOfPassengers, int passengerCount)
+        {
+            //arrange
+            int expected = 2;
+            var request = fixture.request;
+            request.NumberOfPassengers = numberOfPassengers;
+
+            var elevator = fixture.elevator;
+            elevator.PassengerCount = passengerCount;
+            elevator.Movement = common.Enums.Movement.Stationary;
+
+            //act
+            var result = PassengerHandler.PickUpPassengers(fixture.elevator, request).Result;
+
+            //assert
+            Assert.NotEqual(expected, result.PassengerCount);
+        }
     }
 }
