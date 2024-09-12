@@ -35,7 +35,7 @@ namespace elevator_simulator.common.v1.Interfaces
         /// <param name="requestedFloor"></param>
         /// <param name="elevators"></param>
         /// <returns>returns an elevator that is closest to the requested floor</returns>
-        Elevator GetClosestElevator(int requestedFloor, List<Elevator>? elevators);
+        Task<Elevator> GetClosestElevator(int requestedFloor, List<Elevator>? elevators);
         /// <summary>
         /// retrieves the elevator with an available space
         /// </summary>

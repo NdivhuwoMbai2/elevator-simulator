@@ -70,7 +70,7 @@ namespace elevator_simulator.tests
             int expected = 0;
 
             //act
-            var actualElevator = ElevatorHandler.GetClosestElevator(requestingFloor, Fixture.Elevators);
+            var actualElevator = ElevatorHandler.GetClosestElevator(requestingFloor, Fixture.Elevators).Result;
 
             //assert
             Assert.Equal(expected, actualElevator.currentFloor );
@@ -83,7 +83,7 @@ namespace elevator_simulator.tests
             int expected = 5;
 
             //act
-            var actual = ElevatorHandler.GetClosestElevator(requestingFloor, Fixture.Elevators);
+            var actual = ElevatorHandler.GetClosestElevator(requestingFloor, Fixture.Elevators).Result;
 
             //assert
             Assert.NotEqual(expected,actual.currentFloor);
