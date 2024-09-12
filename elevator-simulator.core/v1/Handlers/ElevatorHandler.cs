@@ -22,8 +22,16 @@ namespace elevator_simulator.core.v1.Handlers
 
         public List<string> AddElevatorType(List<string> elevatorTypes, string elevatorType)
         {
-            elevatorTypes.Add(elevatorType);
-            return elevatorTypes;
+            //check if elevator type already exists
+            if (!elevatorTypes.Any(e=>e.Contains(elevatorType, System.StringComparison.OrdinalIgnoreCase)))
+            {
+                elevatorTypes.Add(elevatorType);
+                return elevatorTypes;
+            }else
+            {
+                Console.WriteLine("Elevator type already added");
+                throw new ArgumentException("Elevator type already added");
+            } 
         }
 
         public List<string> LoadElevatorTypes() => new List<string>() { "high-speed", "glass", "freight" };

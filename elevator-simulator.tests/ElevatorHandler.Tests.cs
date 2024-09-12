@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace elevator_simulator.tests
 {
-     
+
     public class ElevatorHandler_tests : IClassFixture<TestDataFixture>
     {
         public IElevatorHandler ElevatorHandler;
@@ -73,7 +73,7 @@ namespace elevator_simulator.tests
             var actualElevator = ElevatorHandler.GetClosestElevator(requestingFloor, Fixture.Elevators).Result;
 
             //assert
-            Assert.Equal(expected, actualElevator.currentFloor );
+            Assert.Equal(expected, actualElevator.currentFloor);
         }
         [Theory]
         [InlineData(8)]
@@ -86,7 +86,32 @@ namespace elevator_simulator.tests
             var actual = ElevatorHandler.GetClosestElevator(requestingFloor, Fixture.Elevators).Result;
 
             //assert
-            Assert.NotEqual(expected,actual.currentFloor);
+            Assert.NotEqual(expected, actual.currentFloor);
+        }
+        [Theory]
+        [InlineData("Test")]
+        public void Add_elevator_types_valid(string elevatorType)
+        {
+            //arrange
+            string expected = "Test";
+            var elevatorTypes = ElevatorHandler.LoadElevatorTypes();
+
+            //act
+            var result = ElevatorHandler.AddElevatorType(elevatorTypes, elevatorType);
+
+            var actual = result.FirstOrDefault(e => e == "Test");
+
+            //assert
+            Assert.Equal(expected, actual);
+        }
+        [Theory]
+        [InlineData("glasS")]
+        public void Add_an_already_existing_elevator_types_invalid_throws_ArgumentException(string elevatorType)
+        {
+            //arrange 
+            var elevatorTypes = ElevatorHandler.LoadElevatorTypes(); 
+            // act & assert 
+            Assert.Throws<ArgumentException>(() => ElevatorHandler.AddElevatorType(elevatorTypes, elevatorType));
         }
     }
 }
